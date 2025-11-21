@@ -10,73 +10,30 @@ open Avalonia.FuncUI.DSL
 open Avalonia.Layout
 
 module Main =
+  let buildGrid (width: int) (height: int) =
+    let colDefs = String.concat "," (List.replicate width "25")
+    let rowDefs = String.concat "," (List.replicate height "25")
+    Grid.create [
+      Grid.columnDefinitions colDefs
+      Grid.rowDefinitions rowDefs
+      Grid.children (
+        List.init (width * height) (fun i -> 
+          TextBlock.create [
+            Grid.column (i % width)
+            Grid.row (i / width)
+            TextBlock.text (string i)
+            TextBlock.fontSize 10.0
+            TextBlock.horizontalAlignment HorizontalAlignment.Center
+            TextBlock.verticalAlignment VerticalAlignment.Center
+          ]
+        )
+      )
+    ]
+
   let view () =
     Component(fun ctx ->
-      let state = ctx.useState 0
-      Grid.create [
-        Grid.columnDefinitions [
-          ColumnDefinition (GridLength 100)
-          ColumnDefinition (GridLength 100)
-        ]
-        Grid.rowDefinitions [
-          RowDefinition (GridLength 100)
-          RowDefinition (GridLength 100)
-        ]
-        Grid.children [
-          TextBlock.create [
-            Grid.column 0
-            Grid.row 0
-            TextBlock.text "1"
-          ]
-          TextBlock.create [
-            Grid.column 1
-            Grid.row 0
-            TextBlock.text "2"
-          ]
-          TextBlock.create [
-            Grid.column 0
-            Grid.row 1
-            TextBlock.text "3"
-          ]
-          TextBlock.create [
-            Grid.column 1
-            Grid.row 1
-            TextBlock.text "4"
-          ]
-        ]
-      ]
-      // DockPanel.create [
-      //   DockPanel.children [
-      //     Button.create [
-      //       Button.dock Dock.Bottom
-      //       Button.onClick (fun _ -> state.Set(state.Current - 1))
-      //       Button.content "-"
-      //       Button.horizontalAlignment HorizontalAlignment.Stretch
-      //       Button.horizontalContentAlignment HorizontalAlignment.Center
-      //     ]
-      //     Button.create [
-      //       Button.dock Dock.Bottom
-      //       Button.onClick (fun _ -> state.Set(state.Current + 1))
-      //       Button.content "+"
-      //       Button.horizontalAlignment HorizontalAlignment.Stretch
-      //       Button.horizontalContentAlignment HorizontalAlignment.Center
-      //     ]
-      //     TextBlock.create [
-      //       TextBlock.dock Dock.Top
-      //       TextBlock.fontSize 48.0
-      //       TextBlock.verticalAlignment VerticalAlignment.Center
-      //       TextBlock.horizontalAlignment HorizontalAlignment.Center
-      //       TextBlock.text (string state.Current)
-      //     ]
-      //     TextBlock.create [
-      //       TextBlock.dock Dock.Top
-      //       TextBlock.fontSize 48.0
-      //       TextBlock.verticalAlignment VerticalAlignment.Center
-      //       TextBlock.horizontalAlignment HorizontalAlignment.Center
-      //       TextBlock.text "Hi :3"
-      //     ]
-      //   ]
-      // ]
+      // let state = ctx.useState 0
+      buildGrid 60 30
     )
 
 type MainWindow() =
