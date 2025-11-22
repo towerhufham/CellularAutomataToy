@@ -14,14 +14,22 @@ module Main =
     if n < 0 then max + n else 
       if n >= max then max - n else n 
   let GoL (cells: bool list) (width: int) (height: int): bool list =
-    let toXY (i: int) = wrap (i % width) width, wrap (i / width) height 
+    let toXY (i: int) = 
+      wrap (i % width) width, 
+      wrap (i / width) height 
+
     let toI (xy: int * int) = snd xy * width + fst xy
-    let addXY (xy1: int * int) (xy2: int * int) = wrap (fst xy1 + fst xy2) width, wrap (snd xy1 + snd xy2) height 
+
+    let addXY (xy1: int * int) (xy2: int * int) = 
+      wrap (fst xy1 + fst xy2) width, 
+      wrap (snd xy1 + snd xy2) height 
+
     let nei (xy: int * int) = 
-      [-1,-1;0,-1;1,-1;-1,0;1,0;-1,1;0,1;1,1]
+      [-1,-1; 0,-1; 1,-1; -1,0; 1,0; -1,1; 0,1; 1,1]
       |> List.map (fun p -> addXY xy p)
       |> List.map (fun p -> cells[toI p])
       |> List.sumBy (fun b -> if b then 1 else 0)
+      
     List.mapi (fun i c -> 
       match c, nei (toXY i) with
         | true, a when a >= 2 && a <= 3 -> true
